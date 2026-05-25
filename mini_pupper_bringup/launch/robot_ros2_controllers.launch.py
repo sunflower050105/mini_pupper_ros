@@ -75,7 +75,7 @@ def generate_launch_description():
         output="screen"
     )
 
-    # Start the broadcaster once controller_manager is up, then load the
+   # Start the broadcaster once controller_manager is up, then load the
     # quadruped controller after the broadcaster spawner completes.
     joint_state_broadcaster_handler = RegisterEventHandler(
         OnProcessStart(
