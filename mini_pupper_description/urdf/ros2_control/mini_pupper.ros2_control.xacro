@@ -26,8 +26,9 @@
     <xacro:if value="${use_gazebo_hardware}">
       <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-          <parameters>$(find mini_pupper_simulation)/config/ros2_control/mini_pupper_2_controllers_sim.yaml</parameters>
-          <hold_joints>false</hold_joints>
+          <robot_param>robot_description</robot_param>
+          <robot_param_node>robot_state_publisher</robot_param_node>
+          <parameters>$(find mini_pupper_simulation)/config/ros2_control/mini_pupper_2_controllers_sim.yaml</parameters> 
         </plugin>
       </gazebo>
     </xacro:if>
