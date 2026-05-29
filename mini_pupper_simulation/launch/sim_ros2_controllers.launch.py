@@ -1,57 +1,80 @@
 #!/usr/bin/env python3
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Copyright (c) 2026 MangDang
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 from launch import LaunchDescription
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit, OnProcessStart
+from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.actions import Node
-
-from launch_ros.substitutions import FindPackageShare
-
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
-from launch.conditions import IfCondition, UnlessCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import (
-    EnvironmentVariable,
-    LaunchConfiguration,
-    PathJoinSubstitution,
-    TextSubstitution,
-)
-from launch.substitutions import Command
 from launch_ros.parameter_descriptions import ParameterValue
-
+from launch_ros.substitutions import FindPackageShare
 import os
-
 def generate_launch_description():
-    joint_state_broadcaster_spawner = Node(
+    controllers_file = PathJoinSubstitution([
+        FindPackageShare("mini_pupper_simulation"),
+        "config/ros2_control",
+        "mini_pupper_2_controllers_sim.yaml"
+    ])
+
+    controller_manager_node = Node(
         package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-        output='screen'
+        executable="ros2_control_node",
+        parameters=[controllers_file, {"use_sim_time": True}],
+        output="screen",
+        remappings=[("/robot_description", "/robot_description")],
     )
 
-    simple_quadruped_controller_spawner = Node(
+    robot_model = os.getenv("ROBOT_MODEL", default="mini_pupper_2")
+    description_package = FindPackageShare("mini_pupper_description")
+    bringup_package = FindPackageShare("mini_pupper_bringup")
+
+    urdf_file = PathJoinSubstitution([
+        description_package,
+        "urdf",
+        robot_model,
+        "mini_pupper_description.urdf.xacro"
+    ])
+
+    robot_description = ParameterValue(
+    Command(["xacro ", urdf_file, " use_gazebo_hardware:=true"]),
+    value_type=str,
+    )
+    gazebo_ros2_control = Node(
+    package='gazebo_ros2_control',
+    executable='gazebo_ros2_control',
+    name='gazebo_ros2_control',
+    output='screen',
+    parameters=[
+        {'robot_description': robot_description},
+        PathJoinSubstitution([FindPackageShare('mini_pupper_simulation'),
+                             'config/ros2_control/mini_pupper_2_controllers_sim.yaml'])
+    ],
+)
+    joint_state_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["simple_quadruped_controller"],
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager", "--activate"],
         output="screen"
     )
 
+    quadruped_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["simple_quadruped_controller", "--controller-manager", "/controller_manager", "--activate"],
+        output="screen"
+    )
+
+    # Event handlers
+    joint_handler = RegisterEventHandler(
+        OnProcessStart(target_action=controller_manager_node, on_start=[joint_state_spawner])
+    )
+
+    quadruped_handler = RegisterEventHandler(
+        OnProcessExit(target_action=joint_state_spawner, on_exit=[quadruped_spawner])
+    )
+
     return LaunchDescription([
-        joint_state_broadcaster_spawner,
-        simple_quadruped_controller_spawner,
+        gazebo_ros2_control,
+        controller_manager_node,
+        joint_handler,
+        quadruped_handler,
     ])
