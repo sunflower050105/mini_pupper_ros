@@ -18,9 +18,13 @@ sudo apt update
 #   git clone https://github.com/Tiryoh/ros2_setup_scripts_ubuntu.git
 # fi
 # ~/ros2_setup_scripts_ubuntu/ros2-jazzy-ros-base-main.sh
-# source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash
+
+
 
 # Create ROS 2 workspace and clone Mini Pupper ROS repository
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
 if ! [ -d "mini_pupper_ros" ]; then
   git clone https://github.com/sunflower050105/mini_pupper_ros.git -b ros2_dev_Jazzy mini_pupper_ros
 else
@@ -40,6 +44,7 @@ rosdep install --from-paths src --ignore-src -r -y
 sudo apt install -y ros-jazzy-teleop-twist-keyboard ros-jazzy-teleop-twist-joy
 sudo apt install -y ros-jazzy-v4l2-camera ros-jazzy-image-transport-plugins
 sudo apt install -y ros-jazzy-rqt*
+sudo apt install python3-pip -y
 pip3 install --user --break-system-packages simple_pid
 
 #colcon build --symlink-install
