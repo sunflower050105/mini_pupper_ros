@@ -39,10 +39,26 @@ sudo apt-get update
 sudo apt -y install python3-pip python3-venv python3-virtualenv
 
 #Auto install ROS2 Jazzy
-if ! [ -d "ros2_setup_scripts_ubuntu" ]; then
-  git clone https://github.com/Tiryoh/ros2_setup_scripts_ubuntu.git
-fi
-~/ros2_setup_scripts_ubuntu/ros2-jazzy-ros-base-main.sh
+
+locale  # check for UTF-8
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+locale  # verify settings
+
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+
+sudo apt update && sudo apt install curl -y
+export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F'"' '{print $4}')
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
+sudo dpkg -i /tmp/ros2-apt-source.deb
+
+sudo apt update
+sudo apt upgrade
+sudo apt install ros-jazzy-desktop
+
 source /opt/ros/jazzy/setup.bash
 
 #clone mini pupper 2 ros2 repo
@@ -59,11 +75,11 @@ touch mini_pupper_ros/mini_pupper_navigation/AMENT_IGNORE
 # install dependencies without unused heavy packages
 cd ~/ros2_ws
 rosdep install --from-paths src --ignore-src -r -y --skip-keys=joint_state_publisher_gui --skip-keys=rviz2 --skip-keys=gazebo_plugins --skip-keys=velodyne_gazebo_plugins
-sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
-sudo apt install -y ros-humble-robot-localization
-sudo apt install ros-humble-teleop-twist-keyboard
-sudo apt install ros-humble-teleop-twist-joy
-sudo apt install -y ros-humble-v4l2-camera ros-humble-image-transport-plugins
+sudo apt install -y ros-jazzy-ros2-control ros-jazzy-ros2-controllers
+sudo apt install -y ros-jazzy-robot-localization
+sudo apt install -y ros-jazzy-teleop-twist-keyboard
+sudo apt install ros-jazzy-teleop-twist-joy
+sudo apt install -y ros-jazzy-v4l2-camera ros-jazzy-image-transport-plugins
 pip3 install simple_pid
 
 #colcon build --symlink-install
