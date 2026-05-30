@@ -49,25 +49,22 @@ source /opt/ros/jazzy/setup.bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 if ! [ -d "mini_pupper_ros" ]; then
-  git clone https://github.com/MushfiqueTM/mini_pupper_ros.git -b ros2-jazzy-clean mini_pupper_ros
+  git clone https://github.com/sunflower050105/mini_pupper_ros.git -b ros2_dev_Jazzy
 fi
 vcs import < mini_pupper_ros/.minipupper.repos --recursive
-# compiling gazebo and cartographer on Raspberry Pi is not recommended
-touch champ/champ/champ_gazebo/AMENT_IGNORE
-touch champ/champ/champ_navigation/AMENT_IGNORE
+# compiling gazebo on Raspberry Pi is not recommended
 touch mini_pupper_ros/mini_pupper_simulation/AMENT_IGNORE
 touch mini_pupper_ros/mini_pupper_navigation/AMENT_IGNORE
 
 # install dependencies without unused heavy packages
 cd ~/ros2_ws
-rosdep install --from-paths src --ignore-src -r -y --skip-keys=joint_state_publisher_gui --skip-keys=rviz2 --skip-keys=ros_gz_sim || true
-sudo apt install ros-jazzy-teleop-twist-keyboard
-sudo apt install ros-jazzy-teleop-twist-joy
-sudo apt install -y ros-jazzy-v4l2-camera ros-jazzy-image-transport-plugins
-pip3 install --user --break-system-packages simple_pid
-
-# New LD Lidar driver dependency
-sudo apt install -y libudev-dev
+rosdep install --from-paths src --ignore-src -r -y --skip-keys=joint_state_publisher_gui --skip-keys=rviz2 --skip-keys=gazebo_plugins --skip-keys=velodyne_gazebo_plugins
+sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
+sudo apt install -y ros-humble-robot-localization
+sudo apt install ros-humble-teleop-twist-keyboard
+sudo apt install ros-humble-teleop-twist-joy
+sudo apt install -y ros-humble-v4l2-camera ros-humble-image-transport-plugins
+pip3 install simple_pid
 
 #colcon build --symlink-install
 MAKEFLAGS=-j1 colcon build --executor sequential --symlink-install
