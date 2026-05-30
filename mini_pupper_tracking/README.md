@@ -49,8 +49,6 @@ This is useful for remote observation and debugging.
 
 ---
 
-> **Note:** This package is only supported with the **Stanford Controller**. The **CHAMP Controller** is not supported.
-
 ### Hardware Requirements
 
 - **Camera**: A Raspberry Pi Camera Module is required to run the tracking system.  
@@ -82,7 +80,7 @@ pip install flask onnxruntime motpy
 
 ```bash
 # ROS2 dependencies
-sudo apt install ros-jazzy-imu-filter-madgwick ros-jazzy-tf-transformations
+sudo apt install ros-humble-imu-filter-madgwick ros-humble-tf-transformations
 ```
 
 ---
@@ -146,7 +144,7 @@ yolo:
 ```bash
 # Terminal 1 (SSH into robot)
 source ~/ros2_ws/install/setup.bash  # Use setup.zsh if your shell is zsh
-ros2 launch mini_pupper_bringup bringup_with_stanford_controller.launch.py
+ros2 launch mini_pupper_bringup bringup.launch.py
 ```
 
 ### Host PC
@@ -250,6 +248,6 @@ This package is licensed under the Apache-2.0 License. See individual source fil
 
 ## Compatibility
 
-- **ROS 2**: Jazzy
-- **Platform**: Ubuntu 24.04 LTS
+- **ROS 2**: Humble
+- **Platform**: Ubuntu 22.04 LTS
 - **Hardware**: Mini Pupper robots with Stanford Controller

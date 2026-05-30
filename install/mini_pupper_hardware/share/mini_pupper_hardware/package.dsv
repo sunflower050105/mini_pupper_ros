@@ -1,0 +1,8 @@
+source;share/mini_pupper_hardware/hook/cmake_prefix_path.dsv
+source;share/mini_pupper_hardware/hook/cmake_prefix_path.sh
+source;share/mini_pupper_hardware/hook/ld_library_path_lib.dsv
+source;share/mini_pupper_hardware/hook/ld_library_path_lib.sh
+source;share/mini_pupper_hardware/local_setup.bash
+source;share/mini_pupper_hardware/local_setup.dsv
+source;share/mini_pupper_hardware/local_setup.sh
+source;share/mini_pupper_hardware/local_setup.zsh

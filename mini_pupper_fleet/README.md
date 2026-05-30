@@ -26,15 +26,15 @@ The system combines fleet-level command coordination, IMU-based Extended Kalman 
 ```bash
 # Robot 1 SSH Terminal
 source ~/ros2_ws/install/setup.bash
-ros2 launch mini_pupper_bringup bringup_with_stanford_controller.launch.py multi_robot:=true robot_namespace:=robot1
+ros2 launch mini_pupper_bringup bringup.launch.py multi_robot:=true robot_namespace:=robot1
 
 # Robot 2 SSH Terminal
 source ~/ros2_ws/install/setup.bash
-ros2 launch mini_pupper_bringup bringup_with_stanford_controller.launch.py multi_robot:=true robot_namespace:=robot2
+ros2 launch mini_pupper_bringup bringup.launch.py multi_robot:=true robot_namespace:=robot2
 
 # Robot 3 SSH Terminal
 source ~/ros2_ws/install/setup.bash
-ros2 launch mini_pupper_bringup bringup_with_stanford_controller.launch.py multi_robot:=true robot_namespace:=robot3
+ros2 launch mini_pupper_bringup bringup.launch.py multi_robot:=true robot_namespace:=robot3
 ```
 
 **Host PC Terminal 1 - Fleet Controller:**
@@ -194,7 +194,7 @@ Main coordination launch file that handles fleet-level control and per-robot nam
 
 ### ROS 2 Packages
 ```bash
-sudo apt install ros-jazzy-tf2 ros-jazzy-tf2-geometry-msgs
+sudo apt install ros-humble-tf2 ros-humble-tf2-geometry-msgs
 ```
 
 ### System Dependencies
@@ -323,6 +323,6 @@ This package is licensed under the Apache-2.0 License. See individual source fil
 
 ## Compatibility
 
-- **ROS 2**: Jazzy
-- **Platform**: Ubuntu 24.04 LTS
+- **ROS 2**: Humble  
+- **Platform**: Ubuntu 22.04 LTS  
 - **Hardware**: Mini Pupper robots with Stanford Controller  

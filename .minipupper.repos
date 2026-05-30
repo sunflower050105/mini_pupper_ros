@@ -1,12 +1,4 @@
 repositories:
-  champ/champ:
-    type: git
-    url: https://github.com/MushfiqueTM/champ.git
-    version: ros2
-  champ/champ_teleop:
-    type: git
-    url: https://github.com/chvmp/champ_teleop.git
-    version: ros2
   ldlidar:
     type: git
     url: https://github.com/Myzhar/ldrobot-lidar-ros2.git

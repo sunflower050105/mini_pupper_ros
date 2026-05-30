@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-# Copyright (c) 2024 MangDang
+# Copyright (c) 2026 MangDang
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,19 +38,27 @@ def generate_launch_description():
     )
 
     gazebo_launch_path = PathJoinSubstitution([
-        FindPackageShare('ros_gz_sim'),
+        FindPackageShare('gazebo_ros'),
         'launch',
-        'gz_sim.launch.py'
+        'gazebo.launch.py'
     ])
+    gui = LaunchConfiguration('gui')
+    gui_launch_arg = DeclareLaunchArgument(
+        name='gui',
+        default_value='true',
+        description='Whether to start the Gazebo GUI'
+    )
 
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(gazebo_launch_path),
         launch_arguments={
-            'gz_args': ['-r ', world]
+            'world': world,
+            'gui': gui,
         }.items()
     )
 
     return LaunchDescription([
         world_launch_arg,
+        gui_launch_arg,
         gazebo_launch
     ])
