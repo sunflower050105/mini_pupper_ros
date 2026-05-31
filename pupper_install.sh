@@ -83,6 +83,13 @@ sudo apt install -y ros-jazzy-robot-localization
 sudo apt install -y ros-jazzy-teleop-twist-keyboard
 sudo apt install ros-jazzy-teleop-twist-joy
 sudo apt install -y ros-jazzy-v4l2-camera ros-jazzy-image-transport-plugins
+
+#Must use virtual env
+
+sudo apt install python3.12-venv
+python3 -m venv ~/ros2_jazzy_venv
+source ~/ros2_jazzy_venv/bin/activate
+pip3 install \ catkin_pkg \ pyyaml \ jinja2 \ typeguard \ empy==3.3.4 \ lark \ setuptools \ colcon-common-extensions
 pip3 install simple_pid
 
 #colcon build --symlink-install
