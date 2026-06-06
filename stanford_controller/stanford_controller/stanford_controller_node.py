@@ -197,7 +197,7 @@ class StanfordControllerNode(Node):
         # disp.show_state(state.behavior_state)
         self.dance_active(command)
         self.pseudo_dance_active(command)
-
+        
         if self.state.behavior_state == BehaviorState.TROT:
             if (
                 abs(command.horizontal_velocity[0]) < 0.01 and
@@ -315,9 +315,16 @@ class StanfordControllerNode(Node):
 
         self.state.joint_angles = self.limit_joint_angles(self.state.joint_angles)
 
+        # --- Odometry calibration (open-loop commanded velocity vs. real ground travel) ---
+        # Depends on the measurement
+        ODOM_LINEAR_SCALE = 0.624   # 0.83(actual) / 1.33 (odom)
+        ODOM_ANGULAR_SCALE = 1.0    # measure separately! (see note below)
+        
         if self.state.behavior_state == BehaviorState.TROT:
-            vx = command.horizontal_velocity[0]
-            vy = command.horizontal_velocity[1]
+            vx = command.horizontal_velocity[0] * ODOM_LINEAR_SCALE
+            vy = command.horizontal_velocity[1] * ODOM_LINEAR_SCALE
+            #vx = command.horizontal_velocity[0]
+            #vy = command.horizontal_velocity[1]
             vyaw = command.yaw_rate
         else:
             vx, vy, vyaw = 0.0, 0.0, 0.0
