@@ -88,3 +88,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+
+Fake note: remember to run this one to feed the directory for stl files in rviz2
+as it reads in /home/ubuntu
+
+sudo ln -s /home/mangdang /home/ubuntu 
