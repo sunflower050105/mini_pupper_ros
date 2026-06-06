@@ -26,6 +26,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
 
 ROBOT_MODEL = os.getenv("ROBOT_MODEL", default="mini_pupper_2")
 
@@ -40,7 +41,7 @@ def generate_launch_description():
         description="Include support stand in robot description for debugging control (true/false)"
     )
 
-    default_world_path = PathJoinSubstitution([this_package, "worlds", "mini_pupper_home.world"])
+    default_world_path = PathJoinSubstitution([this_package, "worlds", "empty.world"])
 
     world = LaunchConfiguration("world")
     world_launch_arg = DeclareLaunchArgument(
@@ -119,14 +120,15 @@ def generate_launch_description():
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(gazebo_launch_path),
         launch_arguments={
-            "world": world,
+            "gz_args": ['-r -v4 ', world],
             "gui": gui,
+            'use_sim_time': 'true',
         }.items()
     )
 
     spawn_entity = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
+        package="ros_gz_sim",
+        executable="create",
         arguments=[
             "-topic", "robot_description",
             "-entity", ROBOT_MODEL,
@@ -170,6 +172,28 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}]
     )
 
+    ros_gz_bridge = Node(
+    package="ros_gz_bridge",
+    executable="parameter_bridge",
+    arguments=[
+        "/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan",
+        "/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU",
+        "/image_raw@sensor_msgs/msg/Image@gz.msgs.Image",
+        "/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo",
+        "/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry",
+    ],
+    parameters=[{"use_sim_time": True}],
+    output="screen"
+    )
+
+    clock_bridge = Node(
+    package="ros_gz_bridge",
+    executable="parameter_bridge",
+    arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+    parameters=[{"use_sim_time": True}],
+    output="screen"
+    )
+
     return LaunchDescription([
         debug_control_launch_arg,
         world_launch_arg,
@@ -179,6 +203,8 @@ def generate_launch_description():
         description_launch,
         gazebo_launch,
         spawn_entity,
+        clock_bridge,
+        ros_gz_bridge,
         odom_tf_broadcaster,
         ros2_controllers_launch,
         delayed_stanford_controller_launch,

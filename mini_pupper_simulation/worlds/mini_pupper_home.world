@@ -1,7 +1,7 @@
-<sdf version='1.7'>
+<sdf version='1.9'>
   <world name='default'>
     <light name='sun' type='directional'>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>true</cast_shadows>
       <pose>0 0 10 0 -0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
@@ -30,13 +30,8 @@
           </geometry>
           <surface>
             <friction>
-              <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
+              <mu>100</mu>
+              <mu2>50</mu2>
             </friction>
             <contact>
               <ode/>
@@ -46,7 +41,7 @@
           <max_contacts>10</max_contacts>
         </collision>
         <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
+          <cast_shadows>false</cast_shadows>
           <geometry>
             <plane>
               <normal>0 0 1</normal>
@@ -55,7 +50,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Grey</name>
             </script>
           </material>
@@ -67,12 +62,18 @@
       </link>
     </model>
     <gravity>0 0 -9.8</gravity>
-    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
-    <atmosphere type='adiabatic'/>
-    <physics name='default_physics' default='0' type='ode'>
+    <physics name='default_physics' type='ode'>
+      <!-- Keep these: -->
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
       <real_time_update_rate>1000</real_time_update_rate>
+      
+      <!-- Add solver config for Harmonic: -->
+      <solver>
+        <type>quick</type>
+        <iters>50</iters>
+        <sor>1.3</sor>
+      </solver>
     </physics>
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
@@ -190,29 +191,19 @@
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <audio>
-      <device>default</device>
-    </audio>
     <plugin filename="gz-sim-physics-system"
-            name="gz::sim::systems::Physics">
+            name="gz::sim::systems::PhysicsSystem">
     </plugin>
     <plugin filename="gz-sim-user-commands-system"
-            name="gz::sim::systems::UserCommands">
+            name="gz::sim::systems::UserCommandsSystem">
     </plugin>
     <plugin filename="gz-sim-scene-broadcaster-system"
-            name="gz::sim::systems::SceneBroadcaster">
+            name="gz::sim::systems::SceneBroadcasterSystem">
     </plugin>
     <plugin filename="gz-sim-sensors-system"
-            name="gz::sim::systems::Sensors">
+            name="gz::sim::systems::SensorsSystem">
       <render_engine>ogre2</render_engine>
     </plugin>
-    <plugin filename="gz-sim-imu-system"
-            name="gz::sim::systems::Imu">
-    </plugin>
-    <plugin filename="gz-sim-contact-system"
-            name="gz::sim::systems::Contact">
-    </plugin>
-    <wind/>
     <model name='simple_small_room'>
       <pose>4.13961 -1.7321 0 0 -0 0</pose>
       <link name='Wall_0'>
@@ -246,7 +237,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -291,7 +282,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -336,7 +327,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -381,7 +372,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -426,7 +417,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -471,7 +462,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -516,7 +507,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -561,7 +552,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -606,7 +597,7 @@
           </geometry>
           <material>
             <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
               <name>Gazebo/Bricks</name>
             </script>
             <ambient>1 1 1 1</ambient>
@@ -668,7 +659,7 @@
           <material>
             <script>
               <name>Gazebo/Yellow</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
             </script>
           </material>
         </visual>
@@ -721,7 +712,7 @@
           <material>
             <script>
               <name>Gazebo/Blue</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Materials/scripts/gazebo.material</uri>
             </script>
           </material>
         </visual>

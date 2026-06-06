@@ -3,6 +3,15 @@ project(mini_pupper_simulation)
 
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
+find_package(gz_plugin_vendor REQUIRED)
+find_package(gz_sim_vendor REQUIRED)
+
+# Then find the actual Gazebo libraries
+find_package(gz-plugin REQUIRED)
+find_package(gz-sim REQUIRED)
+
+# For gz_ros2_control
+find_package(gz_ros2_control REQUIRED)
 find_package(rclpy REQUIRED)
 
 # Install Python modules
