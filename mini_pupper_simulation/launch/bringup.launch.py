@@ -151,15 +151,20 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(ros2_controllers_launch_path)
     )
 
+    delay_ros2_controllers_launch = TimerAction(
+        period=6.0,
+        actions=[ros2_controllers_launch],
+    )
+
     # Delayed start: Stanford controller first (wait for controllers to be active)
     delayed_stanford_controller_launch = TimerAction(
-        period=8.0,
+        period=4.0,
         actions=[stanford_controller_launch],
     )
 
     # Delayed start: twist converter after Stanford controller has started
     delayed_twist_converter_launch = TimerAction(
-        period=12.0,
+        period=6.0,
         actions=[twist_converter_launch],
     )
 
