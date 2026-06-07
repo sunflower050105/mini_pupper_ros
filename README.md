@@ -89,8 +89,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-
+1.
 Fake note: remember to run this one to feed the directory for stl files in rviz2
 as it reads in /home/ubuntu
 
 sudo ln -s /home/mangdang /home/ubuntu 
+2. 
+do this to help the gazebo to find the meshes: (remember to add to .bashrc)
+export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:/home/mangdang/ros2_ws/src/mini_pupper_ros
+echo $GZ_SIM_RESOURCE_PATH
