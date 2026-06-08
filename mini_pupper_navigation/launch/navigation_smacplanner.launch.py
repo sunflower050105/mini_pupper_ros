@@ -29,7 +29,7 @@ from nav2_common.launch import RewrittenYaml
 def generate_launch_description():
     this_package = FindPackageShare('mini_pupper_navigation')
 
-    default_map_path = PathJoinSubstitution([this_package, 'maps', 'map.yaml'])
+    default_map_path = PathJoinSubstitution([this_package, 'maps', 'map_test.yaml'])
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_sim_time_launch_arg = DeclareLaunchArgument(
