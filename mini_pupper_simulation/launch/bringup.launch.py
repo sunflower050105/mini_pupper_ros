@@ -41,7 +41,7 @@ def generate_launch_description():
         description="Include support stand in robot description for debugging control (true/false)"
     )
 
-    default_world_path = PathJoinSubstitution([this_package, "worlds", "empty.world"])
+    default_world_path = PathJoinSubstitution([this_package, "worlds", "slam_nav_test.world"])
 
     world = LaunchConfiguration("world")
     world_launch_arg = DeclareLaunchArgument(
@@ -132,8 +132,8 @@ def generate_launch_description():
         arguments=[
             "-topic", "robot_description",
             "-entity", ROBOT_MODEL,
-            "-x", "0.0",
-            "-y", "0.0",
+            "-x", "1.25",
+            "-y", "1.25",
             "-z", world_init_z,
             "-R", "0",
             "-P", "0",
